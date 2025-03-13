@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { CatPmibccService } from './cat_pmibcc.service';
-import { CatPmibccController } from './cat_pmibcc.controller';
+import { CatPmibccService } from './service/cat_pmibcc.service';
+import { CatPmibccController } from './controller/cat_pmibcc.controller';
 
 @Module({
   providers: [CatPmibccService],

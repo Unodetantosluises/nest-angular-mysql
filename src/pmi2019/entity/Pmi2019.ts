@@ -1,8 +1,8 @@
-import { Column, Entity } from "typeorm";
+import { Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity("pmi2019", { schema: "mgi-pruebas" })
 export class Pmi2019 {
-  @Column("int", { name: "no", nullable: true })
+  @PrimaryColumn("int", { name: "no" })
   no: number | null;
 
   @Column("int", { name: "partida", nullable: true })

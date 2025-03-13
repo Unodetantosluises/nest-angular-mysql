@@ -1,4 +1,4 @@
-import { Column, Entity } from "typeorm";
+import { Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity("catunimed19", { schema: "mgi-pruebas" })
 export class Catunimed19 {
@@ -11,7 +11,7 @@ export class Catunimed19 {
   @Column("varchar", { name: "ui", nullable: true, length: 50 })
   ui: string | null;
 
-  @Column("varchar", { name: "clp", length: 15 })
+  @PrimaryColumn("varchar", { name: "clp", length: 15 })
   clp: string;
 
   @Column("varchar", { name: "tipo", nullable: true, length: 10 })

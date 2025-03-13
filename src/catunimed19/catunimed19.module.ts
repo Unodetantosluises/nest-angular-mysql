@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { Catunimed19Controller } from './catunimed19.controller';
-import { Catunimed19Service } from './catunimed19.service';
+import { Catunimed19Controller } from './controller/catunimed19.controller';
+import { Catunimed19Service } from './service/catunimed19.service';
 
 @Module({
   controllers: [Catunimed19Controller],
