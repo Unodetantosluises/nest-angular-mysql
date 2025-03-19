@@ -8,6 +8,7 @@ export class Catunimed19Controller {
 
     constructor(private catUniMed19Service: Catunimed19Service){}
 
+    // Creates a new record for the table catunimed19
     @Post()
     createcatUniMed19(@Body() newCatUniMed19: CreateCatUnimed19Dto): Promise<Catunimed19>{
         return this.catUniMed19Service.createcatUniMed19(newCatUniMed19);
@@ -15,8 +16,8 @@ export class Catunimed19Controller {
 
     // Get all the records from the table catunmied19
     @Get()
-    getcatUniMed19(): Promise<Catunimed19[]> {
-        return this.catUniMed19Service.getcatUniMeds19();
+    getcatUniMeds19(): Promise<Catunimed19[]> {
+        return this.catUniMed19Service.getcatuniMeds19();
     }
 
     // Gets an individual record from the table catunimed19
@@ -24,7 +25,7 @@ export class Catunimed19Controller {
     async getcatUniMed19(@Param('clp') clp:string): Promise<Catunimed19 | null> {
         console.log('clp')
         console.log(typeof clp)
-        return this.catUniMed19Service.getcatUniMed19(clp);
+        return this.catUniMed19Service.getcatuniMed19(clp);
     }
 
 }

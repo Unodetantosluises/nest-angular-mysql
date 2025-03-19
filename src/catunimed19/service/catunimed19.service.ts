@@ -14,11 +14,11 @@ export class Catunimed19Service {
         return this.catUniMed19Repository.save(newCatUniMed19);
     }
 
-    getcatUniMeds19(){
+    getcatuniMeds19(){
         return this.catUniMed19Repository.find()
     }
 
-    getcatUniMed19(clp: string): Promise<Catunimed19 | null> {
+    getcatuniMed19(clp: string): Promise<Catunimed19 | null> {
         return this.catUniMed19Repository.findOne({
             where: { clp }
         });
