@@ -1,4 +1,4 @@
-export class CreateCatPmi2019Dto {
+export class CreatePmi2019Dto {
     no: number;
     partida: number;
     nz: number;
