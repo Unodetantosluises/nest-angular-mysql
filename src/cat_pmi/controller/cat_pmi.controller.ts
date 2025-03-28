@@ -35,6 +35,7 @@ export class CatPmiController {
         return this.catPmiService.deletecatPmi(clvsi);
     }
 
+    // Updates a record from the table cat-pmi
     @Patch(':clvsi')
     updatecatPmi(@Param('clvsi') clvsi: string, @Body() CatPmi: UpdateCatPmiDto){
             return this.catPmiService.updatecatPmi(clvsi, CatPmi);
