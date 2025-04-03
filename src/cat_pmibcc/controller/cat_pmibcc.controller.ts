@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { CatPmibccService } from '../service/cat_pmibcc.service';
 import { CreateCatPmiBccDto } from '../dto/create-catpmibcc.dto';
 import { CatPmibcc } from '../entity/CatPmibcc';
+import { UpdateCatPmiBccDto } from '../dto/update-catpmibcc.dto';
 
 @Controller('cat-pmibcc')
 export class CatPmibccController {
@@ -26,5 +27,18 @@ export class CatPmibccController {
         console.log('clvsi');
         console.log(typeof clvsi)
         return this.catPmiBccService.getcatpmiBcc(clvsi);
+    }
+
+    // Deletes a record from the table cat-pmibcc
+    @Delete(':clvsi')
+    deletecatpmiBcc(@Param('clvsi') clvsi: string) {
+        console.log('clvsi');
+        return this.catPmiBccService.deletecatpmiBcc(clvsi);
+    }
+
+    // Updates a record from the table cat-pmibcc
+    @Patch(':clvsi')
+    updatecatpmiBcc(@Param('clvsi') clvsi: string, @Body() CatPmibcc: UpdateCatPmiBccDto) {
+        return this.catPmiBccService.updatecatpmiBcc(clvsi, CatPmibcc);
     }
 }

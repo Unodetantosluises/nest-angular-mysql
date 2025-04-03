@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
 import { CreateCatPmiDto } from '../dto/create-catpmi.dto';
 import { CatPmiService } from '../service/cat_pmi.service';
 import { CatPmi } from '../entity/CatPmi';
@@ -29,7 +29,9 @@ export class CatPmiController {
         return this.catPmiService.getcatPmi(clvsi);
     }
 
+    // Deletes a record from the table cat-pmi
     @Delete(':clvsi')
+    @HttpCode(HttpStatus.OK) // 200 succesfull deletion
     deletecatPmi(@Param('clvsi') clvsi: string) {
         console.log('clvsi');
         return this.catPmiService.deletecatPmi(clvsi);
@@ -38,6 +40,6 @@ export class CatPmiController {
     // Updates a record from the table cat-pmi
     @Patch(':clvsi')
     updatecatPmi(@Param('clvsi') clvsi: string, @Body() CatPmi: UpdateCatPmiDto){
-            return this.catPmiService.updatecatPmi(clvsi, CatPmi);
-        }
+        return this.catPmiService.updatecatPmi(clvsi, CatPmi);
+    }
 }

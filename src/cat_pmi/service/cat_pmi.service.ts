@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CatPmi } from '../entity/CatPmi';
 import { Repository } from 'typeorm';
@@ -25,8 +25,19 @@ export class CatPmiService {
         });
     }
     
-    deletecatPmi(clvsi: string) {
-        return this.catPmiRepository.delete({ clvsi })
+    async deletecatPmi(clvsi: string): Promise<{ message: string }> {
+        try {
+            const catPmi = await this.catPmiRepository.findOne({ where: { clvsi }});
+
+            if(!catPmi) {
+                throw new NotFoundException(`No se encontro el registro con clvsi: ${clvsi}`)
+            }
+        await this.catPmiRepository.delete({ clvsi });
+
+        return { message: `Registro con  clvsi: ${clvsi} eliminado exitosamente`};
+        } catch(error) {
+            throw new InternalServerErrorException(`Error Elimnando el registro: ${error.message}`);
+        }
     }
 
     updatecatPmi(clvsi: string, catPmi: UpdateCatPmiDto){
