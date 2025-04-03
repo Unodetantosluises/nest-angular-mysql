@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common';
 import { CreatePmi2019Dto } from '../dto/create-pmi2019.dto';
 import { Pmi2019 } from '../entity/Pmi2019';
 import { Pmi2019Service } from '../service/pmi2019.service';
+import { UpdatePmi2019 } from '../dto/update-pmi2019.dto';
 
 @Controller('pmi2019')
 export class Pmi2019Controller {
@@ -26,5 +27,19 @@ export class Pmi2019Controller {
         console.log('no')
         console.log(typeof no)
         return this.pmi2019Service.getPmi2019(no);
+    }
+
+    // Deletes a record from the table pmi2019
+    @Delete(':no')
+    @HttpCode(HttpStatus.OK) // 200 succesfull deletion
+    deletePmi2019(@Param('no') no: number) {
+        console.log('no');
+        return this.pmi2019Service.deletePmi2019(no);
+    }
+
+    // Updates a record from the table pmi2019
+    @Patch(':no')
+    updatePmi2019(@Param('no') no: number, @Body() Pmi2019: UpdatePmi2019){
+        return this.pmi2019Service.updatePmi2019(no, Pmi2019);
     }
 }

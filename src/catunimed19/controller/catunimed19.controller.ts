@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common';
 import { Catunimed19Service } from '../service/catunimed19.service';
 import { CreateCatUnimed19Dto } from '../dto/create-catunimed19.dto';
 import { Catunimed19 } from '../entity/Catunimed19';
+import { UpdateCatUnimed19Dto } from '../dto/update-catunimed19.dto';
 
 @Controller('catunimed19')
 export class Catunimed19Controller {
@@ -28,4 +29,17 @@ export class Catunimed19Controller {
         return this.catUniMed19Service.getcatuniMed19(clp);
     }
 
+    // Deletes a record from the table catunimed19
+    @Delete(':clp')
+    @HttpCode(HttpStatus.OK) // 200 succesfull deletion
+    deletecatUniMed19(@Param('clp') clvsi: string){
+        console.log('clp');
+        return this.catUniMed19Service.deletecatuniMed19(clvsi);
+    }
+
+    // Updates a record from the table catunimed19
+    @Patch(':clp')
+    updatecatUniMed19(@Param('clp') clp: string, @Body() Catunimed19: UpdateCatUnimed19Dto){
+        return this.catUniMed19Service.updatecatUniMed19(clp, Catunimed19);
+    }
 }
