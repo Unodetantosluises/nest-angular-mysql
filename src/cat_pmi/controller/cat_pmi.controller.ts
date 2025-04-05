@@ -30,10 +30,15 @@ export class CatPmiController {
 
     // Gets an individual record from the table cat-pmi
     @Get(':clvsi')
-    async getcatPmi(@Param('clvsi') clvsi: string): Promise<CatPmi | null> {
-        console.log('clvsi');
-        console.log(typeof clvsi)
-        return this.catPmiService.getcatPmi(clvsi);
+    async getcatPmi(@Param('clvsi') clvsi: string): Promise<CatPmi> {
+        try {
+            return await this.catPmiService.getcatPmi(clvsi);
+        } catch (error) {
+            if(error instanceof NotFoundException) {
+                throw new NotFoundException(error.message);
+            }
+            throw new InternalServerErrorException('Ocurrio un error en el servidor')
+        }
     }
 
     // Deletes a record from the table cat-pmi
