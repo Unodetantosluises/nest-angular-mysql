@@ -23,10 +23,8 @@ export class CatPmibccController {
 
     // Gets an individual record from the table cat-pmibcc
     @Get(':clvsi')
-    async getcatpmiBcc(@Param('clvsi') clvsi: string): Promise<CatPmibcc | null> {
-        console.log('clvsi');
-        console.log(typeof clvsi)
-        return this.catPmiBccService.getcatpmiBcc(clvsi);
+    async getcatpmiBcc(@Param('clvsi') clvsi: string) {
+        return await this.catPmiBccService.getcatpmiBcc(clvsi);
     }
 
     // Deletes a record from the table cat-pmibcc

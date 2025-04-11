@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, InternalServerErrorException, NotFoundException, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpException, HttpStatus, InternalServerErrorException, NotFoundException, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
 import { CreateCatPmiDto } from '../dto/create-catpmi.dto';
 import { CatPmiService } from '../service/cat_pmi.service';
 import { CatPmi } from '../entity/CatPmi';
@@ -30,15 +30,8 @@ export class CatPmiController {
 
     // Gets an individual record from the table cat-pmi
     @Get(':clvsi')
-    async getcatPmi(@Param('clvsi') clvsi: string): Promise<CatPmi> {
-        try {
-            return await this.catPmiService.getcatPmi(clvsi);
-        } catch (error) {
-            if(error instanceof NotFoundException) {
-                throw new NotFoundException(error.message);
-            }
-            throw new InternalServerErrorException('Ocurrio un error en el servidor')
-        }
+    async getcatPmi(@Param('clvsi') clvsi: string) {
+      return await this.catPmiService.getcatPmi(clvsi);
     }
 
     // Deletes a record from the table cat-pmi

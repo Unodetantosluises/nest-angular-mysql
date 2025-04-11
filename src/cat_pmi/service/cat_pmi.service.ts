@@ -30,20 +30,20 @@ export class CatPmiService {
         }
     }
 
-    async getcatPmi(clvsi: string): Promise<CatPmi> {
-        try {
-            const catPmi = await this.catPmiRepository.findOne({ where: { clvsi }});
-
-            if(!catPmi) {
-                throw new NotFoundException(`No hay registros en la base de datos con clvsi: ${clvsi}`);
-            }
-            return catPmi;
-        } catch(error) {
-            throw new InternalServerErrorException(
-                `Error obteniendo los registro: ${error.message}`,
-            );
+    async getcatPmi(clvsi: string): Promise<{ status: string; message: string; data: CatPmi | null }> {
+        const catPmi = await this.catPmiRepository.findOne({ where: { clvsi } });
+      
+        if (!catPmi) {
+          throw new NotFoundException(`No se encontro registro con clvsi: ${clvsi}`);
         }
+      
+        return {
+          status: 'success',
+          message: `Registro con clvsi: ${clvsi} encontrado`,
+          data: catPmi,
+        };
     }
+      
     
     async deletecatPmi(clvsi: string): Promise<{ message: string }> {
         try {

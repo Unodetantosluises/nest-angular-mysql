@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CatPmibcc } from '../entity/CatPmibcc';
 import { Repository } from 'typeorm';
@@ -19,10 +19,18 @@ export class CatPmibccService {
         return this.catPmiBccRepository.find()
     }
     
-    getcatpmiBcc(clvsi: string):Promise<CatPmibcc | null> {
-        return this.catPmiBccRepository.findOne({
-            where: { clvsi }
-        });
+    async getcatpmiBcc(clvsi: string):Promise<{ stautus: string; message: string; data: CatPmibcc | null}> {
+        const catPmiBcc = await this.catPmiBccRepository.findOne({ where: { clvsi } });
+
+        if(!catPmiBcc) {
+            throw new NotFoundException(`No se encontro registro con clvsi: ${clvsi} `);
+        }
+
+        return {
+            stautus: 'success',
+            message: `Registro con clvsi: ${clvsi} encontrado`,
+            data: catPmiBcc,
+        };
     }
 
     deletecatpmiBcc(clvsi: string) {
