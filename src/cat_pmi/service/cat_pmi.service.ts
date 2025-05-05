@@ -10,9 +10,19 @@ export class CatPmiService {
 
     constructor(@InjectRepository(CatPmi) private catPmiRepository: Repository<CatPmi>){}
     
-    createcatPmi(catPmi: CreateCatPmiDto) {
-        const newCatPmi = this.catPmiRepository.create(catPmi);
-        return this.catPmiRepository.save(newCatPmi);
+    async createcatPmi(catPmi: CreateCatPmiDto) {
+        try {
+            const newCatPmi = this.catPmiRepository.create(catPmi);
+            const savedCatPmi = await this.catPmiRepository.save(newCatPmi);
+
+            return {
+                status: 'success',
+                message: 'Registro creado exitosamente',
+                data: savedCatPmi,
+            };
+        } catch (error) {
+            throw new InternalServerErrorException('Error al crear el registro');
+        }   
     }
 
     async getcatPmis(): Promise<CatPmi[]> {
@@ -34,7 +44,7 @@ export class CatPmiService {
         const catPmi = await this.catPmiRepository.findOne({ where: { clvsi } });
       
         if (!catPmi) {
-          throw new NotFoundException(`No se encontro registro con clvsi: ${clvsi}`);
+          throw new NotFoundException(`No se encontro el registro con clvsi: ${clvsi}`);
         }
       
         return {
@@ -43,42 +53,52 @@ export class CatPmiService {
           data: catPmi,
         };
     }
-      
     
-    async deletecatPmi(clvsi: string): Promise<{ message: string }> {
-        try {
+    async deletecatPmi(clvsi: string): Promise<{ status: string, message: string, data: CatPmi }> {
+        try{
             const catPmi = await this.catPmiRepository.findOne({ where: { clvsi }});
-
+            
             if(!catPmi) {
-                throw new NotFoundException(`No se encontro el registro con clvsi: ${clvsi}`)
-            }
-        await this.catPmiRepository.delete({ clvsi });
-
-        return { message: `Registro con  clvsi: ${clvsi} eliminado exitosamente`};
-        } catch(error) {
-            throw new InternalServerErrorException(`Error Elimnando el registro: ${error.message}`);
-        }
-    }
-
-    async updatecatPmi(clvsi: string, updateCatPmi: UpdateCatPmiDto): Promise<{ message: string }> {
-        try {
-            // Search record if it exits 
-            const existingRecord = await this.catPmiRepository.findOne({ where: { clvsi } });
-    
-            if (!existingRecord) {
-                throw new NotFoundException(`No se encontró un registro con clvsi: ${clvsi}`);
-            }
-    
-            // Update record
-            await this.catPmiRepository.update({ clvsi }, updateCatPmi);
-    
-            return { message: `Registro con clvsi: ${clvsi} actualizado exitosamente` };
-        } catch (error) {
-            if (error instanceof QueryFailedError) {
-                throw new BadRequestException(`Error en la base de datos: ${error.message}`);
-            }
-            throw new InternalServerErrorException(`Error actualizando el registro con clvsi: ${clvsi}`);
+            throw new NotFoundException(`No se encontro el registro con clvsi: ${clvsi}`);
         }
         
-    }    
+        await this.catPmiRepository.remove(catPmi);
+        
+        return {
+            status: 'success',
+            message: `Registro con clvsi: ${clvsi} eliminado`,
+            data: catPmi,
+        };
+    } catch (error) {
+        if(error instanceof QueryFailedError) {
+            throw new BadRequestException(`Error en la base de datos: ${error.message}`)
+        }
+        throw new InternalServerErrorException(`Error eliminando el registro con clvsi:${clvsi}`);
+    }
+    }
+
+    async updatecatPmi(clvsi: string, updateCatPmi: UpdateCatPmiDto): Promise<{ status: string; message: string; data: CatPmi | null; }> {
+        try {
+          const catPmi = await this.catPmiRepository.findOne({ where: { clvsi } });
+      
+          if (!catPmi) {
+            throw new NotFoundException(`No se encontró un registro con clvsi: ${clvsi}`);
+          }
+      
+          await this.catPmiRepository.update({ clvsi }, updateCatPmi);
+      
+          const updatedRecord = await this.catPmiRepository.findOne({ where: { clvsi } });
+      
+          return {
+            status: 'success',
+            message: `Registro con clvsi: ${clvsi} actualizado exitosamente`,
+            data: updatedRecord,
+          };
+        } catch (error) {
+          if (error instanceof QueryFailedError) {
+            throw new BadRequestException(`Error en la base de datos: ${error.message}`);
+          }
+          throw new InternalServerErrorException(`Error actualizando el registro con clvsi: ${clvsi}`);
+        }
+      }     
 }
